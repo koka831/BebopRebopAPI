@@ -1,6 +1,7 @@
 #include "CBebopInterface.h"
 #include "Utility.h"
 #include <iostream>
+#include "BIBebopAPI.h"
 
 using namespace rebop;
 CBebopInterface bebop;
