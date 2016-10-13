@@ -8,9 +8,6 @@ namespace rebop
 
 class OperationManager
 {
-	public:
-		bool Load();
-		void Print();
 	private:
 		ENUM(operation_tag,
 			TAKEOFF,
@@ -23,4 +20,4 @@ class OperationManager
 		operation_tag::type operation;
 };
 
-} // namespace bluei
+}

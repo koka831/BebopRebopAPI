@@ -20,7 +20,7 @@ template <class T> void createEnumMap(std::map<std::string,T> &_map, char* _list
 
         va_list args;
         va_start(args, _num);
-        if ((tmp_key = strtok(listCopy, ", ")) != NULL) _map[tmp_key] = static_cast<T> (va_arg(args, int));
+        if ((tmp_key = strtok(listCpy, ", ")) != NULL) _map[tmp_key] = static_cast<T> (va_arg(args, int));
         for (int i = 1; i < _num; i++) {
             if ((tmp_key = strtok(NULL, ", ")) != NULL) _map[tmp_key] = static_cast<T> (va_arg(args, int));
         }
