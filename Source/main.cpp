@@ -1,44 +1,35 @@
-// Includes
 #include "CBebopInterface.h"
 #include "Utility.h"
+#include <iostream>
 
-// Namespaces
 using namespace rebop;
+CBebopInterface bebop;
 
 int main()
 {
-	CBebopInterface bebop;
-
-	// Initialize
 	bebop.Initialize();
 
-	// Connected and ready to do stuff, theoretically
 	if( bebop.IsConnected() == false )
 	{
-		LOG( ERROR ) << "No connection! Can't do anything!";
+		LOG( ERROR ) << "No connection";
 	}
 	else
 	{
-		LOG( INFO ) << "Ready to do stuff!";
+		LOG(INFO) << "ready. plz enter cmd.";
+		LOG(INFO) << "(e.g)";
+		LOG(INFO) << "takeoff, land, right, front, back, and e(e is emergercy cmd).";
 
-		std::string temp;
-		LOG( INFO ) << "Enter anything to take off.";
-		std::cin >> temp;
-
-		// Take off
-		bebop.Takeoff();
-
-		LOG( INFO ) << "Enter anything to land.";
-		std::cin >> temp;
-
-		// Land
-		bebop.Land();
+		while(true) {
+			std::string operation;
+			getline(std::cin, operation);
+			if(!sendOperation(operation)) break;
+		}
 	}
 
-
-	// Cleanup - Kill the network and clean up memory
 	bebop.Cleanup();
 
 	return 0;
 
 }
+
+
