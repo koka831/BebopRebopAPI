@@ -69,21 +69,21 @@ bool sendOperation(eOperation ope)
             enableContinueOperation = false;
             break;
         case EMERGENCY:
-            deb_bebop.Emergency();
-            deb_bebop.Cleanup();
+            dev_bebop.Emergency();
+            dev_bebop.Cleanup();
             enableContinueOperation = false;
             break;
         case LEFT:
-            deb_bebop.Flip(EFlipDirection::LEFT);
+            dev_bebop.Flip(EFlipDirection::LEFT);
             break;
         case RIGHT:
-            deb_bebop.Flip(EFlipDirection::RIGHT);
+            dev_bebop.Flip(EFlipDirection::RIGHT);
             break;
         case FRONT:
-            deb_bebop.Flip(EFlipDirection::FRONT);
+            dev_bebop.Flip(EFlipDirection::FRONT);
             break;
         case BACK:
-            deb_bebop.Flip(EFlipDirection::BACK);
+            dev_bebop.Flip(EFlipDirection::BACK);
             break;
         default:
             break;
