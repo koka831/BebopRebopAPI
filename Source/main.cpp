@@ -1,7 +1,8 @@
 #include "CBebopInterface.h"
 #include "Utility.h"
 #include <iostream>
-#include "BIBebopAPI.h"
+
+bool sendOperation()
 
 using namespace rebop;
 CBebopInterface bebop;
@@ -9,6 +10,15 @@ CBebopInterface bebop;
 int main()
 {
 	bebop.Initialize();
+
+	std::map<std::string,Status> eOperationMap;
+	eOperationMap["takeoff"] = TAKEOFF;
+	eOperationMap["land"] = LAND;
+	eOperationMap["e"] = EMERGENCY;
+	eOperationMap["front"] = FRONT;
+	eOperationMap["back"] = BACK;
+	eOperationMap["left"] = LEFT;
+	eOperationMap["right"] = RIGHT;
 
 	if( bebop.IsConnected() == false )
 	{
@@ -21,9 +31,10 @@ int main()
 		LOG(INFO) << "takeoff, land, right, front, back, and e(e is emergercy cmd).";
 
 		while(true) {
-			std::string operation;
-			getline(std::cin, operation);
-			if(!sendOperation(operation)) break;
+			std::string s;
+			getline(std::cin, s);
+			Operation ope = eOperationMap[s];
+			if(!sendOperation(ope)) break;
 		}
 	}
 
@@ -33,4 +44,50 @@ int main()
 
 }
 
+bool sendOperation(std::string operation)
+{
+	int _ope = operation_tag[operation];
+    bool enableContinueOperation = true;
 
+    switch(_ope) {
+        case TAKEOFF:
+            bebop.Takeoff();
+            break;
+        case LAND:
+            bebop.Land();
+            bebop.Cleanup();
+            enableContinueOperation = false;
+            break;
+        case EMERGENCY:
+            bebop.Emergency();
+            bebop.Cleanup();
+            enableContinueOperation = false;
+            break;
+        case LEFT:
+            bebop.Flip(LEFT);
+            break;
+        case RIGHT:
+            bebop.Flip(RIGHT);
+            break;
+        case FRONT:
+            bebop.Flip(FRONT);
+            break;
+        case BACK:
+            bebop.Flip(BACK);
+            break;
+        default:
+            break;
+    }
+    return enableContinueOperation;
+}
+
+enum class eOperation
+{
+	TAKEOFF,
+	LAND,
+	E,
+	LEFT,
+	RIGHT,
+	FRONT,
+	BACK
+};
