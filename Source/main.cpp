@@ -2,25 +2,36 @@
 #include "Utility.h"
 #include <iostream>
 
-bool sendOperation()
+typedef enum
+{
+	TAKEOFF,
+	LAND,
+	EMERGENCY,
+	LEFT,
+	RIGHT,
+	FRONT,
+	BACK
+}eOperation;
+
+bool sendOperation(eOperation ope);
 
 using namespace rebop;
-CBebopInterface bebop;
+CBebopInterface dev_bebop;
 
 int main()
 {
-	bebop.Initialize();
+	dev_bebop.Initialize();
 
-	std::map<std::string,Status> eOperationMap;
+	std::map<std::string,eOperation> eOperationMap;
 	eOperationMap["takeoff"] = TAKEOFF;
 	eOperationMap["land"] = LAND;
 	eOperationMap["e"] = EMERGENCY;
-	eOperationMap["front"] = FRONT;
-	eOperationMap["back"] = BACK;
 	eOperationMap["left"] = LEFT;
 	eOperationMap["right"] = RIGHT;
+	eOperationMap["front"] = FRONT;
+	eOperationMap["back"] = BACK;
 
-	if( bebop.IsConnected() == false )
+	if( dev_bebop.IsConnected() == false )
 	{
 		LOG( ERROR ) << "No connection";
 	}
@@ -33,61 +44,49 @@ int main()
 		while(true) {
 			std::string s;
 			getline(std::cin, s);
-			Operation ope = eOperationMap[s];
+			eOperation ope = eOperationMap[s];
 			if(!sendOperation(ope)) break;
 		}
 	}
 
-	bebop.Cleanup();
+	dev_bebop.Cleanup();
 
 	return 0;
 
 }
 
-bool sendOperation(std::string operation)
+bool sendOperation(eOperation ope)
 {
-	int _ope = operation_tag[operation];
     bool enableContinueOperation = true;
 
-    switch(_ope) {
+    switch(ope) {
         case TAKEOFF:
-            bebop.Takeoff();
+            dev_bebop.Takeoff();
             break;
         case LAND:
-            bebop.Land();
-            bebop.Cleanup();
+            dev_bebop.Land();
+            dev_bebop.Cleanup();
             enableContinueOperation = false;
             break;
         case EMERGENCY:
-            bebop.Emergency();
-            bebop.Cleanup();
+            deb_bebop.Emergency();
+            deb_bebop.Cleanup();
             enableContinueOperation = false;
             break;
         case LEFT:
-            bebop.Flip(LEFT);
+            deb_bebop.Flip(EFlipDirection::LEFT);
             break;
         case RIGHT:
-            bebop.Flip(RIGHT);
+            deb_bebop.Flip(EFlipDirection::RIGHT);
             break;
         case FRONT:
-            bebop.Flip(FRONT);
+            deb_bebop.Flip(EFlipDirection::FRONT);
             break;
         case BACK:
-            bebop.Flip(BACK);
+            deb_bebop.Flip(EFlipDirection::BACK);
             break;
         default:
             break;
     }
     return enableContinueOperation;
 }
-
-enum class eOperation
-{
-	TAKEOFF,
-	LAND,
-	E,
-	LEFT,
-	RIGHT,
-	FRONT,
-	BACK
-};
